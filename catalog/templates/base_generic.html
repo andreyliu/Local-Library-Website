@@ -10,14 +10,8 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <style>
-        #content-area {
-            padding-top:10px;
-        }
-        #top-row {
-            padding-top:5px;
-        }
-    </style>
+    {% block additional_css %}
+    {% endblock additional_css %}
 </head>
 <body>
     <div class="container-fluid">
@@ -31,11 +25,9 @@
             </div>
             <div class="col" style="text-align: right;">
                 {% if user.is_authenticated %}
-{#                    <span class="badge badge-info">#}
                         User: {{ user.get_username }}
                         &nbsp;
                         <a href="{% url 'logout'%}?next={{request.path}}">Logout</a>
-{#                    </span>#}
 
                 {% else %}
                 <a href="{% url 'login'%}?next={{request.path}}">Login</a>
@@ -47,10 +39,12 @@
                 {% block sidebar %}
                     <ul class="sidebar-nav">
                         <li><a href="{% url 'index' %}">Home</a></li>
-                        <li><a href="{% url 'books' %}">All books</a></li>
-                        <li><a href="{% url 'authors' %}">All authors</a></li>
+                        <li><a href="{% url 'books' %}">Books</a></li>
+                        <li><a href="{% url 'authors' %}">Authors</a></li>
                         <li><a href="{% url 'my-borrowed' %}">My borrowed</a></li>
+
                         {% if perms.catalog.can_mark_returned %}
+                            <hr>
                             <li>
                                 <a href="{% url 'all-borrowed' %}">All borrowed</a>
                             </li>

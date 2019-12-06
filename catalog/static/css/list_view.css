@@ -1,0 +1,17 @@
+.list-title {
+    display: inline;
+    margin-right: 10px;
+}
+
+.catalog-list{
+    list-style: none;
+}
+
+.catalog-list li {
+    margin: 5px 0px;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+}
+
+.option-right {
+    float: right;
+}

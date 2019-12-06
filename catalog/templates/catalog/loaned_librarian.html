@@ -1,17 +1,24 @@
 {% extends "base_generic.html" %}
 
+{% block additional_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/list_view.css'%}">
+{% endblock %}
+
 {% block content %}
 <h1>All Borrowed Books</h1>
-    <ul>
+    <ul class="catalog-list">
     {% for book_inst in bookinstance_list %}
     <li class="{% if book_inst.is_overdue %}text-danger{% endif %}">
     <a href="{% url 'book-detail' book_inst.book.id%}">
         {{ book_inst.book }}
     </a> ({{ book_inst.due_back }}) - {{ book_inst.borrower }}
-{#    {% if perms.catalog.can_mark_returned %}#}
-         &nbsp;- <a href="{% url 'renew-book-librarian' book_inst.id %}">
-        Renew</a>
-{#    {% endif %}#}
+        <span class="option-right">
+            <a class="text-info"
+               href="{% url 'renew-book-librarian' book_inst.id %}">
+            Renew
+            </a>
+        </span>
     </li>
     {% endfor %}
     </ul>

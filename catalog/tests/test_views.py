@@ -333,4 +333,4 @@ class AuthorCreateTest(TestCase):
                                         'date_of_birth': datetime.date(year=1902, month=2, day=27),
                                         'date_of_death': datetime.date(year=1968, month=12, day=20),
                                     })
-        self.assertRedirects(response, reverse('author-detail', kwargs={'pk': 1}))
+        self.assertRedirects(response, reverse('authors'))

@@ -114,6 +114,7 @@ class AuthorCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.can_maintain'
     model = Author
     fields = '__all__'
+    success_url = reverse_lazy('authors')
 
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):

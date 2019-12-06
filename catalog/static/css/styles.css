@@ -1,5 +1,11 @@
+#content-area {
+    padding-top:15px;
+}
+#top-row {
+    padding-top:5px;
+}
 .sidebar-nav {
-    margin-top: 20px;
+    margin-top:15px;
     padding: 0;
     list-style: none;
 }
