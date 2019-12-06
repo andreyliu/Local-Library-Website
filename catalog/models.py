@@ -74,7 +74,6 @@ class BookInstance(models.Model):
         choices=LOAN_STATUS,
         blank=True,
         default='m',
-        help_text='Book availability',
     )
 
     language = models.ManyToManyField('Language', help_text='book language')

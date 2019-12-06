@@ -8,7 +8,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Book, BookInstance, Author, Language
-from catalog.forms import RenewBookForm
+from catalog.forms import RenewBookForm, ChangeBookStatusForm
 
 
 # @login_required
@@ -108,6 +108,34 @@ def renew_book_librarian(request, pk):
     }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
+
+
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
+def manage_book_librarian(request, pk):
+    book_instance = get_object_or_404(BookInstance, pk=pk)
+
+    if request.method == 'POST':
+        form = ChangeBookStatusForm(request.POST)
+
+        if form.is_valid():
+            status = form.cleaned_data['status']
+            book_instance.status = status
+            if book_instance.status == 'o':
+                book_instance.borrower = form.cleaned_data['borrower']
+                book_instance.due_back = form.cleaned_data['due_back']
+            book_instance.save()
+            return HttpResponseRedirect(reverse('book-detail', kwargs={'pk': book_instance.book.pk}))
+
+    else:
+        form = ChangeBookStatusForm()
+
+    context = {
+        'form': form,
+        'book_instance': book_instance,
+    }
+
+    return render(request, 'catalog/book_manage_librarian.html', context)
 
 
 class AuthorCreate(PermissionRequiredMixin, CreateView):
