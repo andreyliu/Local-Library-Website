@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qs2)a(@#zcet=%yy2f200=55d@dq_5$guw%j$@&lnku5pt8!sy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 ALLOWED_HOSTS = ['.herokuapp.com', 'localhost']
 
@@ -132,11 +132,13 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'pitt.woodwork@gmail.com'
-EMAIL_HOST_PASSWORD = 'kouzmbcejyiztrpb'
+EMAIL_HOST_USER = os.environ.get('LOCAL_LIBRARY_EMAIL_ADDR')
+EMAIL_HOST_PASSWORD = os.environ.get('LOCAL_LIBRARY_EMAIL_PSWD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Pittsburgh Woodwork <noreply@gmail.com>'
+
+ADMINS = [('Andre', os.environ.get('ADMIN_EMAIL', 'andre@example.com'))]
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
