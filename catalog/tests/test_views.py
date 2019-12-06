@@ -319,4 +319,18 @@ class AuthorCreateTest(TestCase):
 
         self.assertEqual(403, response.status_code)
 
+    def test_logged_in_with_permission(self):
+        self.manager_login()
+        response = self.client.get(reverse('author_create'))
+        self.assertEqual(200, response.status_code)
 
+    def test_redirect_on_success(self):
+        self.manager_login()
+        response = self.client.post(reverse('author_create'),
+                                    {
+                                        'first_name': 'John',
+                                        'last_name': 'Steinbeck',
+                                        'date_of_birth': datetime.date(year=1902, month=2, day=27),
+                                        'date_of_death': datetime.date(year=1968, month=12, day=20),
+                                    })
+        self.assertRedirects(response, reverse('author-detail', kwargs={'pk': 1}))
