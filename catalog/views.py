@@ -86,7 +86,7 @@ class LoanedBooksListView(PermissionRequiredMixin, generic.ListView):
 
 
 @login_required
-@permission_required('catalog.can_mark_returned', login_url='accounts/', raise_exception=True)
+@permission_required('catalog.can_mark_returned', raise_exception=True)
 def renew_book_librarian(request, pk):
     book_instance = get_object_or_404(BookInstance, pk=pk)
 
