@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qs2)a(@#zcet=%yy2f200=55d@dq_5$guw%j$@&lnku5pt8!sy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -121,6 +121,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
@@ -129,10 +131,11 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'pitt.woodwork@gmail.com'
-EMAIL_HOST_PASSWORD = 'kouzmbcejyiztrpb'
+EMAIL_HOST_USER = os.environ.get('LOCAL_LIBRARY_EMAIL_ADDR')
+EMAIL_HOST_PASSWORD = os.environ.get('LOCAL_LIBRARY_EMAIL_PSWD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Pittsburgh Woodwork <noreply@gmail.com>'
 
+ADMINS = [('Andre', os.environ.get('ADMIN_EMAIL', 'andre@example.com'))]
 
