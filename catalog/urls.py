@@ -1,6 +1,5 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
-
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -18,4 +17,10 @@ urlpatterns = [
     path('book/<int:pk>/update/', views.BookUpdate.as_view(), name='book_update'),
     path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book_delete'),
     path('book/<uuid:pk>/manage/', views.manage_book_librarian, name='manage-book-librarian'),
+]
+
+urlpatterns += [
+    path('author-autocomplete/', views.AuthorAutoComplete.as_view(), name='author-autocomplete'),
+    path('genre-autocomplete/', views.GenreAutoComplete.as_view(), name='genre-autocomplete'),
+    path('user_id-autocomplete/', views.UserIdAutoComplete.as_view(), name='user_id-autocomplete'),
 ]

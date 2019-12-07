@@ -1,14 +1,18 @@
 import datetime
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import Book, BookInstance, Author, Language
-from catalog.forms import RenewBookForm, ChangeBookStatusForm
+from dal import autocomplete
+
+from .models import Book, BookInstance, Author, Language, Genre
+from catalog.forms import RenewBookForm, ChangeBookStatusForm, BookForm
 
 
 # @login_required
@@ -160,13 +164,21 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 class BookCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.can_maintain'
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre']
+    template_name = 'catalog/book_form.html'
+    form_class = BookForm
+    # fields = '__all__'
+    # fields = ['title', 'author', 'summary', 'isbn', 'genre']
+
+    def get_object(self, queryset=None):
+        return Author.objects.first()
 
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = 'catalog.can_maintain'
     model = Book
-    fields = '__all__'
+    template_name = 'catalog/book_form.html'
+    form_class = BookForm
+    # fields = '__all__'
 
 
 class BookDelete(PermissionRequiredMixin, DeleteView):
@@ -174,3 +186,49 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
     success_url = reverse_lazy('books')
 
+
+class AuthorAutoComplete(PermissionRequiredMixin, autocomplete.Select2QuerySetView):
+
+    permission_required = 'catalog.can_maintain'
+
+    def get_queryset(self):
+
+        if self.q:
+            if ' ' not in self.q:
+                qs = Author.objects.all()\
+                    .filter(Q(first_name__istartswith=self.q) | Q(last_name__istartswith=self.q))
+            else:
+                names = self.q.split(' ')
+                qs = Author.objects.all() \
+                    .filter(Q(first_name__istartswith=names[0]) | Q(last_name__istartswith=names[1]))
+
+        else:
+            qs = Author.objects.all()
+
+        return qs
+
+
+class GenreAutoComplete(PermissionRequiredMixin, autocomplete.Select2QuerySetView):
+
+    permission_required = 'catalog.can_maintain'
+
+    def get_queryset(self):
+        qs = Genre.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+
+
+class UserIdAutoComplete(PermissionRequiredMixin, autocomplete.Select2QuerySetView):
+
+    permission_required = 'catalog.can_mark_returned'
+
+    def get_queryset(self):
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+
+        return qs

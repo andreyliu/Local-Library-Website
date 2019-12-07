@@ -1,9 +1,10 @@
 import datetime
 
 from django import forms
+from dal import autocomplete
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from .models import BookInstance
+from .models import BookInstance, Book, Author
 
 
 def verify_4week_loan_period(date):
@@ -51,5 +52,17 @@ class ChangeBookStatusForm(forms.ModelForm):
     class Meta:
         model = BookInstance
         fields = ['status', 'borrower', 'due_back']
+        widgets = {
+            'borrower': autocomplete.ModelSelect2(url='user_id-autocomplete')
+        }
 
 
+class BookForm(forms.ModelForm):
+
+    class Meta:
+        model = Book
+        fields = '__all__'
+        widgets = {
+            'author': autocomplete.ModelSelect2(url='author-autocomplete'),
+            'genre': autocomplete.ModelSelect2Multiple(url='genre-autocomplete'),
+        }

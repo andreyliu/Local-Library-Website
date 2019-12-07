@@ -10,8 +10,10 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    {% block additional_css %}
-    {% endblock additional_css %}
+    {% block additional_css %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+
     <link rel="shortcut icon" href="{% static 'icons/book-icon/favicon.ico' %}">
 <link rel="icon" type="image/png" href="{% static 'icons/book-icon/android-chrome-192x192.png' %}" sizes="192x192">
 <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/book-icon/apple-touch-icon.png' %}">
