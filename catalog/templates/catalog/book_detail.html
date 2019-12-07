@@ -1,5 +1,4 @@
 {% extends "base_generic.html" %}
-{#TODO author detail link#}
 
 {% block content %}
     <h1>Title: {{ book.title }}</h1>
@@ -26,6 +25,9 @@
             {% endif %}
             <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
             <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+            <a class="text-info" href="{% url 'manage-book-librarian' pk=copy.pk %}">
+                Manage
+            </a>
         {% endfor %}
     </div>
 {% endblock %}
